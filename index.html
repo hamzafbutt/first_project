@@ -65,7 +65,8 @@
                     </div>
                     <div class="controls">
                         <div class="control-group">
-                            <label for="angleSlider">Winkel <span id="angleValue">0</span>°</label>
+                            <label for="angleSlider">Winkel <input type="number" id="angleInput" class="value-input"
+                                    value="45" min="0" max="360">°</label>
                             <input type="range" id="angleSlider" min="0" max="360" value="45" step="1">
                         </div>
                         <div class="values">
@@ -164,15 +165,18 @@
                     </div>
                     <div class="controls">
                         <div class="control-group">
-                            <label for="sideASlider">Seite a: <span id="sideAValue">100</span></label>
+                            <label for="sideASlider">Seite a: <input type="number" id="sideAInput" class="value-input"
+                                    value="100" min="50" max="200"></label>
                             <input type="range" id="sideASlider" min="50" max="200" value="100" step="1">
                         </div>
                         <div class="control-group">
-                            <label for="sideBSlider">Seite b: <span id="sideBValue">100</span></label>
+                            <label for="sideBSlider">Seite b: <input type="number" id="sideBInput" class="value-input"
+                                    value="100" min="50" max="200"></label>
                             <input type="range" id="sideBSlider" min="50" max="200" value="100" step="1">
                         </div>
                         <div class="control-group">
-                            <label for="gammaSlider">Winkel &gamma;: <span id="gammaValue">90</span>&deg;</label>
+                            <label for="gammaSlider">Winkel &gamma;: <input type="number" id="gammaInput"
+                                    class="value-input" value="90" min="5" max="175">&deg;</label>
                             <input type="range" id="gammaSlider" min="5" max="175" value="90" step="1">
                         </div>
                         <div class="formula-card">
@@ -230,7 +234,8 @@
                     </div>
                     <div class="controls">
                         <div class="control-group">
-                            <label for="tiltSlider">Neigungswinkel <span id="tiltValue">0</span>°</label>
+                            <label for="tiltSlider">Neigungswinkel <input type="number" id="tiltInput"
+                                    class="value-input" value="0" min="0" max="45">°</label>
                             <input type="range" id="tiltSlider" min="0" max="45" value="0" step="1">
                         </div>
                         <div class="bottle-formula-card">

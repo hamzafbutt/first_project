@@ -296,12 +296,40 @@ header p {
 .control-group label {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 1rem;
 }
 
-#angleValue {
+.value-input {
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 0.4rem;
+    color: var(--primary);
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 700;
+    width: 70px;
+    padding: 2px 8px;
+    text-align: right;
+    transition: var(--transition-smooth);
+    outline: none;
+}
+
+.value-input:focus {
+    background: rgba(124, 58, 237, 0.2);
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.2);
+}
+
+.value-input::-webkit-inner-spin-button,
+.value-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#angleInput {
     color: var(--primary);
 }
 

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const angleSlider = document.getElementById('angleSlider');
-    const angleValue = document.getElementById('angleValue');
+    const angleInput = document.getElementById('angleInput');
     const dynamicAngles = document.querySelectorAll('.dynamic-angle');
 
     // SVG Elements
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let tanVal = Math.tan(angleRad);
 
         // Update Text Values
-        angleValue.textContent = angleDeg;
+        angleInput.value = angleDeg;
         dynamicAngles.forEach(el => el.textContent = angleDeg);
 
         valSin.textContent = sinVal.toFixed(3);
@@ -156,6 +156,16 @@ document.addEventListener('DOMContentLoaded', () => {
         pointCos.setAttribute('cx', angleDeg);
         pointCos.setAttribute('cy', -cosVal * 100);
     }
+
+    angleInput.addEventListener('input', () => {
+        let val = parseInt(angleInput.value);
+        if (!isNaN(val)) {
+            if (val < 0) val = 0;
+            if (val > 360) val = 360;
+            angleSlider.value = val;
+            updateTrigonometry();
+        }
+    });
 
     // --- Exercises Logic ---
     const questionText = document.getElementById('questionText');
@@ -348,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Bottle Animation Logic ---
     const tiltSlider = document.getElementById('tiltSlider');
-    const tiltValue = document.getElementById('tiltValue');
+    const tiltInput = document.getElementById('tiltInput');
     const waterLayer = document.getElementById('waterLayer');
     const heightDiffLine = document.getElementById('heightDiffLine');
     const heightDiffText = document.getElementById('heightDiffText');
@@ -366,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tiltDeg = parseInt(tiltSlider.value);
         const tiltRad = (tiltDeg * Math.PI) / 180;
 
-        tiltValue.textContent = tiltDeg;
+        tiltInput.value = tiltDeg;
 
         const diameter = 150; // Bottle width in SVG
         const h = diameter * Math.tan(tiltRad);
@@ -449,6 +459,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (tiltSlider) {
         tiltSlider.addEventListener('input', updateBottleAnimation);
+        tiltInput.addEventListener('input', () => {
+            let val = parseInt(tiltInput.value);
+            if (!isNaN(val)) {
+                if (val < 0) val = 0;
+                if (val > 45) val = 45;
+                tiltSlider.value = val;
+                updateBottleAnimation();
+            }
+        });
         updateBottleAnimation();
     }
 
@@ -456,9 +475,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const sideASlider = document.getElementById('sideASlider');
     const sideBSlider = document.getElementById('sideBSlider');
     const gammaSlider = document.getElementById('gammaSlider');
-    const sideAValue = document.getElementById('sideAValue');
-    const sideBValue = document.getElementById('sideBValue');
-    const gammaValue = document.getElementById('gammaValue');
+    const sideAInput = document.getElementById('sideAInput');
+    const sideBInput = document.getElementById('sideBInput');
+    const gammaInput = document.getElementById('gammaInput');
     const valTriA = document.getElementById('valTriA');
     const triPath = document.getElementById('triPath');
     const gammaArc = document.getElementById('gammaArc');
@@ -475,9 +494,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const gDeg = parseFloat(gammaSlider.value);
         const gRad = (gDeg * Math.PI) / 180;
 
-        sideAValue.textContent = a;
-        sideBValue.textContent = b;
-        gammaValue.textContent = gDeg;
+        sideAInput.value = a;
+        sideBInput.value = b;
+        gammaInput.value = gDeg;
 
         // Coordinates:
         // C is origin (0,0)
@@ -534,6 +553,21 @@ document.addEventListener('DOMContentLoaded', () => {
         [sideASlider, sideBSlider, gammaSlider].forEach(slider => {
             slider.addEventListener('input', updateSineAreaAnimation);
         });
+
+        [sideAInput, sideBInput, gammaInput].forEach((input, idx) => {
+            const sliders = [sideASlider, sideBSlider, gammaSlider];
+            input.addEventListener('input', () => {
+                let val = parseFloat(input.value);
+                if (!isNaN(val)) {
+                    const slider = sliders[idx];
+                    if (val < parseFloat(slider.min)) val = parseFloat(slider.min);
+                    if (val > parseFloat(slider.max)) val = parseFloat(slider.max);
+                    slider.value = val;
+                    updateSineAreaAnimation();
+                }
+            });
+        });
+
         updateSineAreaAnimation();
     }
 
