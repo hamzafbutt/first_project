@@ -369,6 +369,91 @@ document.addEventListener('DOMContentLoaded', () => {
         updateBottleAnimation();
     }
 
+    // --- Sine Area Logic ---
+    const sideASlider = document.getElementById('sideASlider');
+    const sideBSlider = document.getElementById('sideBSlider');
+    const gammaSlider = document.getElementById('gammaSlider');
+    const sideAValue = document.getElementById('sideAValue');
+    const sideBValue = document.getElementById('sideBValue');
+    const gammaValue = document.getElementById('gammaValue');
+    const valTriA = document.getElementById('valTriA');
+    const triPath = document.getElementById('triPath');
+    const gammaArc = document.getElementById('gammaArc');
+    const pA = document.getElementById('pA');
+    const pB = document.getElementById('pB');
+    const pC = document.getElementById('pC');
+    const lblSideA = document.getElementById('lblSideA');
+    const lblSideB = document.getElementById('lblSideB');
+    const lblAngleGamma = document.getElementById('lblAngleGamma');
+
+    function updateSineAreaAnimation() {
+        const a = parseFloat(sideASlider.value);
+        const b = parseFloat(sideBSlider.value);
+        const gDeg = parseFloat(gammaSlider.value);
+        const gRad = (gDeg * Math.PI) / 180;
+
+        sideAValue.textContent = a;
+        sideBValue.textContent = b;
+        gammaValue.textContent = gDeg;
+
+        // Coordinates:
+        // C is origin (0,0)
+        // A is on x-axis (b, 0)
+        // B is at (a*cos(g), -a*sin(g)) -- Negative Y because SVG Y is down
+        const cx = 0, cy = 0;
+        const ax = b, ay = 0;
+        const bx = a * Math.cos(gRad);
+        const by = -a * Math.sin(gRad);
+
+        // Update Points
+        pC.setAttribute('cx', cx);
+        pC.setAttribute('cy', cy);
+        pA.setAttribute('cx', ax);
+        pA.setAttribute('cy', ay);
+        pB.setAttribute('cx', bx);
+        pB.setAttribute('cy', by);
+
+        // Update Triangle Path
+        triPath.setAttribute('d', `M ${cx} ${cy} L ${ax} ${ay} L ${bx} ${by} Z`);
+
+        // Update Gamma Arc
+        const r = 30;
+        const startX = r;
+        const startY = 0;
+        const endX = r * Math.cos(gRad);
+        const endY = -r * Math.sin(gRad);
+        const largeArc = gDeg > 180 ? 1 : 0;
+        gammaArc.setAttribute('d', `M ${startX} ${startY} A ${r} ${r} 0 ${largeArc} 0 ${endX} ${endY}`);
+
+        // Update Labels (Midpoints for sides)
+        // Label b (Base C-A)
+        lblSideB.setAttribute('x', b / 2);
+        lblSideB.setAttribute('y', 20);
+
+        // Label a (Side C-B)
+        lblSideA.setAttribute('x', bx / 2 - 15);
+        lblSideA.setAttribute('y', by / 2 - 5);
+
+        // Label Gamma
+        lblAngleGamma.setAttribute('x', 35);
+        lblAngleGamma.setAttribute('y', -10);
+
+        // Calculate and Update Area
+        // Formula: A = 0.5 * a * b * sin(gamma)
+        // Since a and b are SVG units, let's normalize them for the display (e.g. / 100)
+        const aNorm = a / 100;
+        const bNorm = b / 100;
+        const area = 0.5 * aNorm * bNorm * Math.sin(gRad);
+        valTriA.textContent = area.toFixed(3);
+    }
+
+    if (sideASlider) {
+        [sideASlider, sideBSlider, gammaSlider].forEach(slider => {
+            slider.addEventListener('input', updateSineAreaAnimation);
+        });
+        updateSineAreaAnimation();
+    }
+
     // Initialization
     drawStaticGraphs();
     angleSlider.addEventListener('input', updateTrigonometry);

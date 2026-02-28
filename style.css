@@ -464,6 +464,30 @@ input[type=range]::-webkit-slider-runnable-track {
     border-top: 2px solid var(--secondary);
 }
 
+/* --- General Formula Card --- */
+.formula-card {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border-top: 2px solid var(--primary);
+    margin-top: 1rem;
+}
+
+/* --- Triangle SVG --- */
+.triangle-svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+}
+
+.triangle-svg circle {
+    transition: all 0.3s ease;
+}
+
+.triangle-svg path {
+    transition: d 0.3s ease;
+}
+
 .aux-triangle {
     pointer-events: none;
 }
