@@ -201,27 +201,41 @@ document.addEventListener('DOMContentLoaded', () => {
         answerInput.disabled = false;
         submitAnswerBtn.disabled = false;
 
-        const types = ['sin', 'cos', 'tan'];
+        const types = ['sin', 'cos', 'tan', 'area', 'bottle'];
         const type = types[Math.floor(Math.random() * types.length)];
 
-        // Generate nice angles: multiples of 30 or 45
-        const angles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
-        const angle = angles[Math.floor(Math.random() * angles.length)];
+        if (type === 'area') {
+            const a = Math.floor(Math.random() * 5) + 5; // 5-10
+            const b = Math.floor(Math.random() * 5) + 5; // 5-10
+            const gamma = [30, 45, 60, 90, 120, 135, 150][Math.floor(Math.random() * 7)];
+            const rad = (gamma * Math.PI) / 180;
+            currentAnswer = 0.5 * a * b * Math.sin(rad);
+            questionText.textContent = `Frage ${currentQuestionIndex + 1}/${totalQuestions}: Berechne die Fläche eines Dreiecks mit a=${a}, b=${b} und \u03B3=${gamma}\u00B0. (A=1/2*a*b*sin(\u03B3))`;
+        } else if (type === 'bottle') {
+            const d = Math.floor(Math.random() * 5) + 5; // 5-10
+            const alpha = [15, 30, 45][Math.floor(Math.random() * 3)];
+            const rad = (alpha * Math.PI) / 180;
+            currentAnswer = d * Math.tan(rad);
+            questionText.textContent = `Frage ${currentQuestionIndex + 1}/${totalQuestions}: Berechne h f\u00FCr eine Flasche mit Durchmesser d=${d} und Neigung \u03B1=${alpha}\u00B0. (h=d*tan(\u03B1))`;
+        } else {
+            // Generate nice angles: multiples of 30 or 45
+            const angles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
+            const angle = angles[Math.floor(Math.random() * angles.length)];
+            const rad = (angle * Math.PI) / 180;
 
-        const rad = (angle * Math.PI) / 180;
+            questionText.textContent = `Frage ${currentQuestionIndex + 1}/${totalQuestions}: Was ist ${type}(${angle}\u00B0)?`;
 
-        questionText.textContent = `Frage ${currentQuestionIndex + 1}/${totalQuestions}: Was ist ${type}(${angle}°)?`;
-
-        if (type === 'sin') {
-            currentAnswer = Math.sin(rad);
-        } else if (type === 'cos') {
-            currentAnswer = Math.cos(rad);
-        } else if (type === 'tan') {
-            // Avoid infinity input for tan(90) and tan(270)
-            if (angle === 90 || angle === 270) {
-                return generateQuestion();
+            if (type === 'sin') {
+                currentAnswer = Math.sin(rad);
+            } else if (type === 'cos') {
+                currentAnswer = Math.cos(rad);
+            } else if (type === 'tan') {
+                // Avoid infinity input for tan(90) and tan(270)
+                if (angle === 90 || angle === 270) {
+                    return generateQuestion();
+                }
+                currentAnswer = Math.tan(rad);
             }
-            currentAnswer = Math.tan(rad);
         }
     }
 
