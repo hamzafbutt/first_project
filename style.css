@@ -371,6 +371,210 @@ input[type=range]::-webkit-slider-runnable-track {
     font-size: 0.85rem;
 }
 
+/* --- Advanced Formulas --- */
+.advanced-formulas-section {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+}
+
+.advanced-formulas-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.formulas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.card-advanced {
+    border-top: 3px solid var(--primary);
+}
+
+.card-advanced h3 {
+    margin-bottom: 1rem;
+    color: var(--primary);
+    font-size: 1.4rem;
+}
+
+/* --- Exercises --- */
+.exercises-section {
+    margin-top: 4rem;
+    animation: fadeIn 1s ease-out 1.4s forwards;
+    opacity: 0;
+}
+
+.exercise-container {
+    padding: 2rem;
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.score-display {
+    background: rgba(139, 92, 246, 0.2);
+    padding: 0.5rem 1.5rem;
+    border-radius: 2rem;
+    border: 1px solid var(--primary);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+    font-weight: 600;
+}
+
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.exercise-body {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.question {
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+.input-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+#answerInput {
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#answerInput:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.feedback {
+    min-height: 2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+.feedback.correct {
+    color: var(--tan-color);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.feedback.incorrect {
+    color: var(--sin-color);
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.1) translateY(-10px);
+    }
+
+    50% {
+        transform: scale(0.9);
+    }
+
+    70% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
 footer {
     text-align: center;
     margin-top: 4rem;

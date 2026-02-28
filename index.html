@@ -111,6 +111,47 @@
                     </div>
                 </div>
             </section>
+
+            <section class="advanced-formulas-section">
+                <h2>Erweiterte Formeln für beliebige Dreiecke</h2>
+                <div class="formulas-grid">
+                    <div class="card card-advanced">
+                        <h3>Sinussatz</h3>
+                        <p class="formula">$$\frac{a}{\sin(\alpha)} = \frac{b}{\sin(\beta)} = \frac{c}{\sin(\gamma)}$$
+                        </p>
+                        <p class="desc">Setzt die Seiten eines Dreiecks und die Sinuswerte der gegenüberliegenden Winkel
+                            in Beziehung.</p>
+                    </div>
+                    <div class="card card-advanced">
+                        <h3>Kosinussatz</h3>
+                        <p class="formula">$$c^2 = a^2 + b^2 - 2ab \cdot \cos(\gamma)$$</p>
+                        <p class="desc">Eine Verallgemeinerung des Satzes von Pythagoras für beliebige (auch
+                            nicht-rechtwinklige) Dreiecke.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="exercises-section card">
+                <h2>Trainiere dein Wissen</h2>
+                <div class="exercise-container">
+                    <div class="exercise-header">
+                        <span class="score-display">Punkte: <strong id="scoreValue">0</strong></span>
+                    </div>
+                    <div class="exercise-body">
+                        <div class="progress-container">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <p id="questionText" class="question">Berechne ...</p>
+                        <div class="input-group">
+                            <input type="number" id="answerInput" step="0.01" placeholder="Deine Antwort (z.B. 0.71)">
+                            <button id="submitAnswerBtn" class="btn-primary">Prüfen</button>
+                        </div>
+                        <p id="feedbackText" class="feedback"></p>
+                    </div>
+                    <button id="nextQuestionBtn" class="btn-secondary" style="display: none;">Nächste Frage</button>
+                </div>
+            </section>
+
         </main>
 
         <footer>

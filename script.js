@@ -157,6 +157,112 @@ document.addEventListener('DOMContentLoaded', () => {
         pointCos.setAttribute('cy', -cosVal * 100);
     }
 
+    // --- Exercises Logic ---
+    const questionText = document.getElementById('questionText');
+    const answerInput = document.getElementById('answerInput');
+    const submitAnswerBtn = document.getElementById('submitAnswerBtn');
+    const feedbackText = document.getElementById('feedbackText');
+    const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+    const scoreValue = document.getElementById('scoreValue');
+    const progressFill = document.getElementById('progressFill');
+
+    let currentAnswer = 0;
+    let score = 0;
+    let currentQuestionIndex = 0;
+    const totalQuestions = 5;
+
+    function generateQuestion() {
+        if (currentQuestionIndex >= totalQuestions) {
+            // End of session
+            questionText.textContent = `Training beendet! Endstand: ${score} Punkte.`;
+            answerInput.style.display = 'none';
+            submitAnswerBtn.style.display = 'none';
+            nextQuestionBtn.textContent = 'Neustart';
+            nextQuestionBtn.style.display = 'inline-block';
+            nextQuestionBtn.onclick = () => {
+                score = 0;
+                currentQuestionIndex = 0;
+                scoreValue.textContent = score;
+                progressFill.style.width = '0%';
+                answerInput.style.display = 'inline-block';
+                submitAnswerBtn.style.display = 'inline-block';
+                nextQuestionBtn.textContent = 'Nächste Frage';
+                nextQuestionBtn.onclick = null;
+                generateQuestion();
+            };
+            return;
+        }
+
+        // Reset UI
+        answerInput.value = '';
+        feedbackText.textContent = '';
+        feedbackText.className = 'feedback';
+        nextQuestionBtn.style.display = 'none';
+        answerInput.disabled = false;
+        submitAnswerBtn.disabled = false;
+
+        const types = ['sin', 'cos', 'tan'];
+        const type = types[Math.floor(Math.random() * types.length)];
+
+        // Generate nice angles: multiples of 30 or 45
+        const angles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
+        const angle = angles[Math.floor(Math.random() * angles.length)];
+
+        const rad = (angle * Math.PI) / 180;
+
+        questionText.textContent = `Frage ${currentQuestionIndex + 1}/${totalQuestions}: Was ist ${type}(${angle}°)?`;
+
+        if (type === 'sin') {
+            currentAnswer = Math.sin(rad);
+        } else if (type === 'cos') {
+            currentAnswer = Math.cos(rad);
+        } else if (type === 'tan') {
+            // Avoid infinity input for tan(90) and tan(270)
+            if (angle === 90 || angle === 270) {
+                return generateQuestion();
+            }
+            currentAnswer = Math.tan(rad);
+        }
+    }
+
+    function checkAnswer() {
+        const userVal = parseFloat(answerInput.value);
+        if (isNaN(userVal)) {
+            feedbackText.textContent = 'Bitte gib eine Zahl ein.';
+            return;
+        }
+
+        currentQuestionIndex++;
+        const progress = (currentQuestionIndex / totalQuestions) * 100;
+        progressFill.style.width = `${progress}%`;
+
+        // Check if within 0.05 tolerance
+        if (Math.abs(userVal - currentAnswer) <= 0.05) {
+            feedbackText.textContent = 'Richtig! 🎉';
+            feedbackText.className = 'feedback correct';
+            score += 10;
+            scoreValue.textContent = score;
+        } else {
+            feedbackText.textContent = `Knapp daneben. Richtig wäre ca. ${currentAnswer.toFixed(2)}.`;
+            feedbackText.className = 'feedback incorrect';
+        }
+
+        answerInput.disabled = true;
+        submitAnswerBtn.disabled = true;
+        nextQuestionBtn.style.display = 'inline-block';
+    }
+
+    if (submitAnswerBtn) {
+        submitAnswerBtn.addEventListener('click', checkAnswer);
+        nextQuestionBtn.addEventListener('click', generateQuestion);
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAnswer();
+        });
+        // Start first question
+        generateQuestion();
+    }
+
+
     // Initialization
     drawStaticGraphs();
     angleSlider.addEventListener('input', updateTrigonometry);
