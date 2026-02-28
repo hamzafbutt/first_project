@@ -409,6 +409,92 @@ input[type=range]::-webkit-slider-runnable-track {
     font-size: 1.4rem;
 }
 
+.bottle-section {
+    margin-top: 3rem;
+}
+
+.bottle-svg {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+}
+
+.bottle-frame {
+    fill: rgba(255, 255, 255, 0.05);
+    stroke: rgba(255, 255, 255, 0.4);
+    stroke-width: 4px;
+}
+
+.water-layer {
+    fill: rgba(59, 130, 246, 0.6);
+    stroke: rgba(255, 255, 255, 0.2);
+    stroke-width: 1px;
+    transition: d 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.measure-line {
+    stroke: var(--primary);
+    stroke-width: 2px;
+    stroke-dasharray: 4;
+}
+
+.measure-line-h {
+    stroke: var(--secondary);
+    stroke-width: 3px;
+    transition: all 0.3s ease;
+}
+
+.measure-text {
+    fill: var(--primary);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.measure-text-h {
+    fill: var(--secondary);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.bottle-formula-card {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border-top: 2px solid var(--secondary);
+}
+
+.aux-triangle {
+    pointer-events: none;
+}
+
+.tri-hyp {
+    stroke: var(--text-color);
+    stroke-width: 1.5px;
+    opacity: 0.4;
+}
+
+.tri-ank {
+    stroke: var(--cos-color);
+    stroke-width: 1.5px;
+    stroke-dasharray: 2;
+    opacity: 0.5;
+}
+
+.tri-geg {
+    stroke: var(--sin-color);
+    stroke-width: 1.5px;
+    stroke-dasharray: 2;
+    opacity: 0.5;
+}
+
+.tri-label {
+    fill: rgba(255, 255, 255, 0.6);
+    font-size: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
 /* --- Exercises --- */
 .exercises-section {
     margin-top: 4rem;

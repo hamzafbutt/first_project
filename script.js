@@ -263,6 +263,112 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    // --- Bottle Animation Logic ---
+    const tiltSlider = document.getElementById('tiltSlider');
+    const tiltValue = document.getElementById('tiltValue');
+    const waterLayer = document.getElementById('waterLayer');
+    const heightDiffLine = document.getElementById('heightDiffLine');
+    const heightDiffText = document.getElementById('heightDiffText');
+    const valBottleH = document.getElementById('valBottleH');
+
+    // Auxiliary Triangle Elements
+    const triHyp = document.getElementById('triHyp');
+    const triAnk = document.getElementById('triAnk');
+    const triGeg = document.getElementById('triGeg');
+    const lblAnk = document.getElementById('lblAnk');
+    const lblHyp = document.getElementById('lblHyp');
+    const valBottleA = document.getElementById('valBottleA');
+
+    function updateBottleAnimation() {
+        const tiltDeg = parseInt(tiltSlider.value);
+        const tiltRad = (tiltDeg * Math.PI) / 180;
+
+        tiltValue.textContent = tiltDeg;
+
+        const diameter = 150; // Bottle width in SVG
+        const h = diameter * Math.tan(tiltRad);
+        const diameterSVG = 150; // Bottle width in pixels for SVG
+        const dNorm = 1.0;       // Normalized diameter for math
+        const hNorm = dNorm * Math.tan(tiltRad);
+        const areaNorm = 0.5 * dNorm * hNorm;
+        const hypNorm = Math.sqrt(dNorm * dNorm + hNorm * hNorm);
+
+        const hSVG = diameterSVG * Math.tan(tiltRad);
+
+        valBottleH.textContent = hNorm.toFixed(3);
+        valBottleA.textContent = areaNorm.toFixed(3);
+
+        // Update Water Path
+        // Initial path: M 25 200 L 175 200 L 175 350 Q 175 350 155 350 L 45 350 Q 25 350 25 330 Z
+        // We tilt the surface from (25, 200) to (175, 200)
+        // Point A: (25, 200 + h/2)
+        // Point B: (175, 200 - h/2)
+        // This keeps the volume roughly constant while tilting
+
+        const yBase = 200;
+        const yStart = yBase + (hSVG / 2);
+        const yEnd = yBase - (hSVG / 2);
+
+        const newPath = `M 25 ${yStart} L 175 ${yEnd} L 175 330 Q 175 350 155 350 L 45 350 Q 25 350 25 330 Z`;
+        waterLayer.setAttribute('d', newPath);
+
+        // Update Auxiliary Triangle
+        // Triangle is formed by: (25, yStart), (175, yStart), (175, yEnd)
+        triAnk.setAttribute('x1', 25);
+        triAnk.setAttribute('y1', yStart);
+        triAnk.setAttribute('x2', 175);
+        triAnk.setAttribute('y2', yStart);
+
+        triGeg.setAttribute('x1', 175);
+        triGeg.setAttribute('y1', yStart);
+        triGeg.setAttribute('x2', 175);
+        triGeg.setAttribute('y2', yEnd);
+
+        triHyp.setAttribute('x1', 25);
+        triHyp.setAttribute('y1', yStart);
+        triHyp.setAttribute('x2', 175);
+        triHyp.setAttribute('y2', yEnd);
+
+        // Update Labels
+        lblAnk.textContent = `Ankathete (d = 1.000)`;
+        lblAnk.setAttribute('x', 100);
+        lblAnk.setAttribute('y', yStart + 15);
+
+        lblHyp.textContent = `Hypotenuse (c = ${hypNorm.toFixed(3)})`;
+        lblHyp.setAttribute('x', 100);
+        lblHyp.setAttribute('y', (yStart + yEnd) / 2 - 10);
+        const hypRotation = -tiltDeg;
+        lblHyp.setAttribute('transform', `rotate(${hypRotation}, 100, ${(yStart + yEnd) / 2 - 10})`);
+
+        // Visibility & Measurement Lines
+        if (tiltDeg === 0) {
+            heightDiffLine.style.opacity = '0';
+            heightDiffText.style.opacity = '0';
+            [triHyp, triAnk, triGeg, lblAnk, lblHyp].forEach(el => el.style.opacity = '0');
+        } else {
+            heightDiffLine.style.opacity = '1';
+            heightDiffText.style.opacity = '1';
+            [triHyp, triAnk, triGeg, lblAnk, lblHyp].forEach(el => el.style.opacity = '1');
+            heightDiffText.textContent = `Gegenkathete (h = ${hNorm.toFixed(3)})`;
+        }
+
+        // Update Measurement Height Line
+        // Vertical line on the right side showing h
+        heightDiffLine.setAttribute('x1', 185);
+        heightDiffLine.setAttribute('y1', yEnd);
+        heightDiffLine.setAttribute('x2', 185);
+        heightDiffLine.setAttribute('y2', yStart);
+
+        // Update Text Position
+        heightDiffText.setAttribute('y', (yStart + yEnd) / 2);
+        heightDiffText.setAttribute('transform', `rotate(90, 195, ${(yStart + yEnd) / 2})`);
+    }
+
+    if (tiltSlider) {
+        tiltSlider.addEventListener('input', updateBottleAnimation);
+        updateBottleAnimation();
+    }
+
     // Initialization
     drawStaticGraphs();
     angleSlider.addEventListener('input', updateTrigonometry);

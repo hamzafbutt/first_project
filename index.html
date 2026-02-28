@@ -131,6 +131,71 @@
                 </div>
             </section>
 
+            <section class="bottle-section card">
+                <h2>Schiefe Flasche: Die Anwendung des Tangens</h2>
+                <p class="desc">Bewege den Schieberegler, um die Flasche zu kippen und zu sehen, wie sich der
+                    Wasserstand verändert. Der Höhenunterschied \( h \) lässt sich mit dem Tangens berechnen!</p>
+                <div class="interactive-container">
+                    <div class="graphics">
+                        <svg viewBox="0 0 200 400" id="bottleSvg" class="bottle-svg">
+                            <!-- Bottle Frame -->
+                            <rect id="bottleFrame" x="25" y="50" width="150" height="300" rx="20"
+                                class="bottle-frame" />
+                            <!-- Bottle Neck -->
+                            <rect x="75" y="20" width="50" height="40" rx="5" class="bottle-frame" />
+
+                            <!-- Water Layer -->
+                            <path id="waterLayer"
+                                d="M 25 200 L 175 200 L 175 350 Q 175 350 155 350 L 45 350 Q 25 350 25 330 Z"
+                                class="water-layer" />
+
+                            <!-- Measurement Lines -->
+                            <g id="measurements">
+                                <!-- Auxiliary Triangle -->
+                                <g id="auxTriangle" class="aux-triangle">
+                                    <line id="triHyp" x1="25" y1="200" x2="175" y2="200" class="tri-hyp" />
+                                    <line id="triAnk" x1="25" y1="200" x2="175" y2="200" class="tri-ank" />
+                                    <line id="triGeg" x1="175" y1="200" x2="175" y2="200" class="tri-geg" />
+
+                                    <text id="lblAnk" x="100" y="220" text-anchor="middle" class="tri-label">Ankathete
+                                        (d = 1.00)</text>
+                                    <text id="lblHyp" x="100" y="190" text-anchor="middle" class="tri-label">Hypotenuse
+                                        (c)</text>
+                                </g>
+
+                                <line id="widthLine" x1="25" y1="365" x2="175" y2="365" class="measure-line" />
+                                <text id="widthLineText" x="100" y="385" text-anchor="middle"
+                                    class="measure-text">Durchmesser (d = 1.00)</text>
+
+                                <line id="heightDiffLine" x1="185" y1="200" x2="185" y2="200" class="measure-line-h" />
+                                <text id="heightDiffText" x="195" y="200" class="measure-text-h"
+                                    transform="rotate(90, 195, 200)">Gegenkathete (h)</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="tiltSlider">Neigungswinkel <span id="tiltValue">0</span>°</label>
+                            <input type="range" id="tiltSlider" min="0" max="45" value="0" step="1">
+                        </div>
+                        <div class="bottle-formula-card">
+                            <p class="formula">$$h = d \cdot \tan(\alpha)$$</p>
+                            <div class="value-item">
+                                <span>Gegenkathete (h) = </span>
+                                <strong id="valBottleH">0.00</strong>
+                            </div>
+                        </div>
+                        <div class="bottle-formula-card" style="margin-top: 1rem; border-top-color: var(--primary);">
+                            <p class="formula">$$A = \frac{1}{2} \cdot d \cdot h$$</p>
+                            <div class="value-item">
+                                <span>Flächeninhalt (A) = </span>
+                                <strong id="valBottleA">0.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section class="exercises-section card">
                 <h2>Trainiere dein Wissen</h2>
                 <div class="exercise-container">
