@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (x % 2 === 0) { // Optimize tan drawing
                 let t = -Math.tan(rad) * 100;
-                if (Math.abs(t) < 500) { // Scaled limit
+                if (Math.abs(t) < 150) { // Scaled limit (ViewBox is 120 high)
                     if (tanD === "" || Math.abs(Math.tan(((x - 2) * Math.PI) / 180)) > 5) {
                         tanD += ` M ${x} ${t}`;
                     } else {
@@ -110,8 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let tanY = -tanVal * tanBaseX;
 
         // Limit tan line length so it doesn't break SVG viewBox completely
-        if (tanY < -5) tanY = -5;
-        if (tanY > 5) tanY = 5;
+        if (tanY < -1.5) tanY = -1.5;
+        if (tanY > 1.5) tanY = 1.5;
 
         tanLine.setAttribute('x1', tanBaseX);
         tanLine.setAttribute('y1', 0);

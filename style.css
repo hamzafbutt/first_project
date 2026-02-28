@@ -308,7 +308,17 @@ input[type=range]::-webkit-slider-runnable-track {
 #graphSvg {
     width: 100%;
     height: 100%;
-    overflow: visible;
+    overflow: hidden;
+}
+
+#unitCircle {
+    overflow: hidden;
+}
+
+.path-sin,
+.path-cos,
+.path-tan {
+    pointer-events: none;
 }
 
 .graph-axis {
