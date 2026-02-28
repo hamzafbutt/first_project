@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trigonometrie Lernen | Sinus, Kosinus, Tangens</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-effect"></div>
+    <div class="container">
+        <header>
+            <h1>Trigonometrie Entdecken</h1>
+            <p>Lerne die Grundlagen von Sinus, Kosinus und Tangens interaktiv.</p>
+        </header>
+
+        <main>
+            <section class="formulas-section">
+                <div class="card card-sin">
+                    <h2>Sinus (sin)</h2>
+                    <p class="formula">$$\sin(\alpha) = \frac{\text{Gegenkathete}}{\text{Hypotenuse}}$$</p>
+                    <p class="desc">Das Verhältnis der dem Winkel gegenüberliegenden Seite zur längsten Seite des
+                        Dreiecks.</p>
+                </div>
+                <div class="card card-cos">
+                    <h2>Kosinus (cos)</h2>
+                    <p class="formula">$$\cos(\alpha) = \frac{\text{Ankathete}}{\text{Hypotenuse}}$$</p>
+                    <p class="desc">Das Verhältnis der am Winkel anliegenden Seite zur längsten Seite des Dreiecks.</p>
+                </div>
+                <div class="card card-tan">
+                    <h2>Tangens (tan)</h2>
+                    <p class="formula">$$\tan(\alpha) = \frac{\text{Gegenkathete}}{\text{Ankathete}}$$</p>
+                    <p class="desc">Das Verhältnis der Gegenkathete zur Ankathete (oder Sinus geteilt durch Kosinus).
+                    </p>
+                </div>
+            </section>
+
+            <section class="interactive-section card">
+                <h2>Interaktiver Einheitskreis</h2>
+                <div class="interactive-container">
+                    <div class="graphics">
+                        <svg viewBox="-1.2 -1.2 2.4 2.4" class="unit-circle" id="unitCircle">
+                            <!-- Axes -->
+                            <line x1="-1.2" y1="0" x2="1.2" y2="0" stroke="rgba(255,255,255,0.2)" stroke-width="0.01" />
+                            <line x1="0" y1="-1.2" x2="0" y2="1.2" stroke="rgba(255,255,255,0.2)" stroke-width="0.01" />
+                            <!-- Circle -->
+                            <circle cx="0" cy="0" r="1" fill="none" class="circle-path" />
+
+                            <!-- Dynamic Elements -->
+                            <path id="angleArc" d="" fill="rgba(168, 85, 247, 0.3)" />
+                            <line id="hypotenuse" x1="0" y1="0" x2="1" y2="0" class="line-hypotenuse" />
+                            <line id="sinLine" x1="1" y1="0" x2="1" y2="0" class="line-sin" />
+                            <line id="cosLine" x1="0" y1="0" x2="1" y2="0" class="line-cos" />
+                            <line id="tanLine" x1="1" y1="0" x2="1" y2="0" class="line-tan" />
+
+                            <!-- Point -->
+                            <circle id="point" cx="1" cy="0" r="0.04" class="point" />
+                        </svg>
+                    </div>
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="angleSlider">Winkel <span id="angleValue">0</span>°</label>
+                            <input type="range" id="angleSlider" min="0" max="360" value="45" step="1">
+                        </div>
+                        <div class="values">
+                            <div class="value-item value-sin">
+                                <span>sin(<span class="dynamic-angle">45</span>°) = </span>
+                                <strong id="valSin">0.71</strong>
+                            </div>
+                            <div class="value-item value-cos">
+                                <span>cos(<span class="dynamic-angle">45</span>°) = </span>
+                                <strong id="valCos">0.71</strong>
+                            </div>
+                            <div class="value-item value-tan">
+                                <span>tan(<span class="dynamic-angle">45</span>°) = </span>
+                                <strong id="valTan">1.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="graphs-section card">
+                <h2>Funktionsgraphen</h2>
+                <div class="graph-container">
+                    <svg viewBox="0 -120 360 240" preserveAspectRatio="none" id="graphSvg">
+                        <!-- Grid Lines -->
+                        <line x1="0" y1="0" x2="360" y2="0" class="graph-axis" />
+                        <line x1="90" y1="-120" x2="90" y2="120" class="graph-grid" />
+                        <line x1="180" y1="-120" x2="180" y2="120" class="graph-grid" />
+                        <line x1="270" y1="-120" x2="270" y2="120" class="graph-grid" />
+
+                        <!-- Function Paths -->
+                        <path id="sinPath" d="" class="path-sin" />
+                        <path id="cosPath" d="" class="path-cos" />
+                        <path id="tanPath" d="" class="path-tan" />
+
+                        <!-- Current Position Indicator -->
+                        <line id="currentLine" x1="45" y1="-120" x2="45" y2="120" class="line-indicator" />
+                        <circle id="pointSin" cx="45" cy="0" r="4" class="graph-point point-sin" />
+                        <circle id="pointCos" cx="45" cy="0" r="4" class="graph-point point-cos" />
+                    </svg>
+                    <div class="graph-labels">
+                        <span>0°</span>
+                        <span>90°</span>
+                        <span>180°</span>
+                        <span>270°</span>
+                        <span>360°</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Erstellt, um Mathe einfach und visuell zu machen.</p>
+        </footer>
+    </div>
+
+    <!-- MathJax for rendering formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
