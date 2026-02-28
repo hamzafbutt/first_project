@@ -164,102 +164,174 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedbackText = document.getElementById('feedbackText');
     const nextQuestionBtn = document.getElementById('nextQuestionBtn');
     const scoreValue = document.getElementById('scoreValue');
+    const streakValue = document.getElementById('streakValue');
+    const streakDisplay = document.getElementById('streakDisplay');
     const progressFill = document.getElementById('progressFill');
+    const exerciseVisual = document.getElementById('exerciseVisual');
 
     let currentAnswer = 0;
     let score = 0;
-    let currentQuestionIndex = 0;
-    const totalQuestions = 5;
+    let currentQuestionIndex = 1;
+    let totalQuestions = 5;
+    let streak = 0;
+
+    function updateStreakDisplay() {
+        if (streak > 1) {
+            streakDisplay.style.display = 'inline-block';
+            streakValue.textContent = streak;
+        } else {
+            streakDisplay.style.display = 'none';
+        }
+    }
+
+    function drawExerciseVisual(type, data) {
+        if (!exerciseVisual) return;
+        exerciseVisual.innerHTML = '';
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 200 120');
+        svg.classList.add('exercise-svg');
+
+        if (type === 'triangle') {
+            const { a, b, gamma, highlight } = data;
+            const drawA = typeof a === 'number' ? a : 8;
+            const drawB = typeof b === 'number' ? b : 8;
+            const rad = (gamma * Math.PI) / 180;
+            const cx = 50, cy = 100;
+            const ax = cx + drawB * 10, ay = cy;
+            const bx = cx + drawA * 10 * Math.cos(rad), by = cy - drawA * 10 * Math.sin(rad);
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', `M ${cx} ${cy} L ${ax} ${ay} L ${bx} ${by} Z`);
+            path.setAttribute('fill', 'rgba(124, 58, 237, 0.2)');
+            path.setAttribute('stroke', 'var(--primary)');
+            path.setAttribute('stroke-width', '2');
+            svg.appendChild(path);
+
+            const addText = (tx, ty, content, color) => {
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', tx);
+                text.setAttribute('y', ty);
+                text.setAttribute('fill', color || 'var(--text-primary)');
+                text.setAttribute('font-size', '10');
+                text.setAttribute('text-anchor', 'middle');
+                text.textContent = content;
+                svg.appendChild(text);
+            };
+
+            addText((cx + ax) / 2, cy + 15, `b = ${b}`, highlight === 'b' ? 'var(--secondary)' : null);
+            addText((cx + bx) / 2 - 10, (cy + by) / 2, `a = ${a}`, highlight === 'a' ? 'var(--secondary)' : null);
+            addText(cx + 20, cy - 5, `${gamma}°`, highlight === 'gamma' ? 'var(--secondary)' : 'var(--accent)');
+        } else if (type === 'unitCircle') {
+            const angle = data.angle;
+            const rad = (angle * Math.PI) / 180;
+            const cx = 100, cy = 60, r = 45;
+
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', r);
+            circle.setAttribute('fill', 'none'); circle.setAttribute('stroke', 'rgba(255,255,255,0.2)');
+            svg.appendChild(circle);
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+            line.setAttribute('x2', cx + r * Math.cos(rad)); line.setAttribute('y2', cy - r * Math.sin(rad));
+            line.setAttribute('stroke', 'var(--primary)');
+            svg.appendChild(line);
+
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', cx); text.setAttribute('y', cy + r + 15);
+            text.setAttribute('text-anchor', 'middle'); text.setAttribute('fill', 'var(--primary)');
+            text.textContent = `Winkel: ${angle}°`;
+            svg.appendChild(text);
+        }
+        exerciseVisual.appendChild(svg);
+    }
 
     function generateQuestion() {
-        if (currentQuestionIndex >= totalQuestions) {
-            // End of session
-            questionText.textContent = `Training beendet! Endstand: ${score} Punkte.`;
+        if (currentQuestionIndex > totalQuestions) {
+            questionText.textContent = `Übung abgeschlossen! Punktzahl: ${score}`;
+            exerciseVisual.innerHTML = '<div style="font-size: 3rem;">🏆</div>';
             answerInput.style.display = 'none';
             submitAnswerBtn.style.display = 'none';
-            nextQuestionBtn.textContent = 'Neustart';
+            nextQuestionBtn.textContent = 'Neuer Durchlauf';
             nextQuestionBtn.style.display = 'inline-block';
-            nextQuestionBtn.onclick = () => {
-                score = 0;
-                currentQuestionIndex = 0;
-                scoreValue.textContent = score;
-                progressFill.style.width = '0%';
-                answerInput.style.display = 'inline-block';
-                submitAnswerBtn.style.display = 'inline-block';
-                nextQuestionBtn.textContent = 'Nächste Frage';
-                nextQuestionBtn.onclick = null;
-                generateQuestion();
-            };
+            nextQuestionBtn.onclick = () => location.reload();
             return;
         }
 
-        // Reset UI
         answerInput.value = '';
-        feedbackText.textContent = '';
-        feedbackText.className = 'feedback';
-        nextQuestionBtn.style.display = 'none';
         answerInput.disabled = false;
         submitAnswerBtn.disabled = false;
+        nextQuestionBtn.style.display = 'none';
+        feedbackText.textContent = '';
+        feedbackText.className = 'feedback';
+        updateStreakDisplay();
 
-        const types = ['sin', 'cos', 'tan', 'area', 'bottle'];
+        const types = ['sin', 'cos', 'tan', 'area', 'bottle', 'sinussatz', 'kosinussatz'];
         const type = types[Math.floor(Math.random() * types.length)];
 
-        if (type === 'area') {
-            const a = Math.floor(Math.random() * 5) + 5; // 5-10
-            const b = Math.floor(Math.random() * 5) + 5; // 5-10
-            const gamma = [30, 45, 60, 90, 120, 135, 150][Math.floor(Math.random() * 7)];
+        if (type === 'sinussatz') {
+            const a = Math.floor(Math.random() * 6) + 4; // 4-10
+            const alpha = [30, 45, 60][Math.floor(Math.random() * 3)];
+            const beta = [30, 45, 60][Math.floor(Math.random() * 3)];
+            const radA = (alpha * Math.PI) / 180;
+            const radB = (beta * Math.PI) / 180;
+            // a / sin(alpha) = b / sin(beta) => b = (a * sin(beta)) / sin(alpha)
+            currentAnswer = (a * Math.sin(radB)) / Math.sin(radA);
+            questionText.textContent = `Finde b: Gegeben a = ${a}, \u03B1 = ${alpha}° und \u03B2 = ${beta}°.`;
+            drawExerciseVisual('triangle', { a, b: '?', gamma: 180 - alpha - beta, highlight: 'b' });
+        } else if (type === 'kosinussatz') {
+            const a = 5, b = 7, gamma = 60;
             const rad = (gamma * Math.PI) / 180;
-            currentAnswer = 0.5 * a * b * Math.sin(rad);
-            questionText.textContent = `Frage ${currentQuestionIndex + 1}/${totalQuestions}: Berechne die Fläche eines Dreiecks mit a=${a}, b=${b} und \u03B3=${gamma}\u00B0. (A=1/2*a*b*sin(\u03B3))`;
+            // c^2 = a^2 + b^2 - 2ab * cos(gamma)
+            currentAnswer = Math.sqrt(a * a + b * b - 2 * a * b * Math.cos(rad));
+            questionText.textContent = `Berechne c: Gegeben a = ${a}, b = ${b} und \u03B3 = ${gamma}°.`;
+            drawExerciseVisual('triangle', { a, b, gamma, highlight: 'c' });
+        } else if (type === 'area') {
+            const a = 8, b = 10, gamma = 30;
+            currentAnswer = 0.5 * a * b * Math.sin((gamma * Math.PI) / 180);
+            questionText.textContent = `Flächeninhalt: a = ${a}, b = ${b}, \u03B3 = ${gamma}°.`;
+            drawExerciseVisual('triangle', { a, b, gamma, highlight: 'area' });
         } else if (type === 'bottle') {
-            const d = Math.floor(Math.random() * 5) + 5; // 5-10
-            const alpha = [15, 30, 45][Math.floor(Math.random() * 3)];
-            const rad = (alpha * Math.PI) / 180;
-            currentAnswer = d * Math.tan(rad);
-            questionText.textContent = `Frage ${currentQuestionIndex + 1}/${totalQuestions}: Berechne h f\u00FCr eine Flasche mit Durchmesser d=${d} und Neigung \u03B1=${alpha}\u00B0. (h=d*tan(\u03B1))`;
+            const d = 10, alpha = 30;
+            currentAnswer = d * Math.tan((alpha * Math.PI) / 180);
+            questionText.textContent = `Flasche (h): d = ${d}, Neigung \u03B1 = ${alpha}°.`;
+            exerciseVisual.innerHTML = '<div style="font-size: 3rem;">🍾</div>';
         } else {
-            // Generate nice angles: multiples of 30 or 45
-            const angles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
-            const angle = angles[Math.floor(Math.random() * angles.length)];
+            const angle = [0, 30, 45, 60, 90, 180, 270][Math.floor(Math.random() * 7)];
             const rad = (angle * Math.PI) / 180;
-
-            questionText.textContent = `Frage ${currentQuestionIndex + 1}/${totalQuestions}: Was ist ${type}(${angle}\u00B0)?`;
-
-            if (type === 'sin') {
-                currentAnswer = Math.sin(rad);
-            } else if (type === 'cos') {
-                currentAnswer = Math.cos(rad);
-            } else if (type === 'tan') {
-                // Avoid infinity input for tan(90) and tan(270)
-                if (angle === 90 || angle === 270) {
-                    return generateQuestion();
-                }
+            if (type === 'sin') currentAnswer = Math.sin(rad);
+            else if (type === 'cos') currentAnswer = Math.cos(rad);
+            else if (type === 'tan') {
+                if (angle === 90 || angle === 270) return generateQuestion();
                 currentAnswer = Math.tan(rad);
             }
+            questionText.textContent = `Was ist ${type}(${angle}°)?`;
+            drawExerciseVisual('unitCircle', { angle });
         }
     }
 
     function checkAnswer() {
-        const userVal = parseFloat(answerInput.value);
-        if (isNaN(userVal)) {
-            feedbackText.textContent = 'Bitte gib eine Zahl ein.';
-            return;
-        }
+        const userVal = parseFloat(answerInput.value.replace(',', '.'));
+        if (isNaN(userVal)) return;
 
-        currentQuestionIndex++;
-        const progress = (currentQuestionIndex / totalQuestions) * 100;
-        progressFill.style.width = `${progress}%`;
+        const isCorrect = Math.abs(userVal - currentAnswer) < 0.1;
 
-        // Check if within 0.05 tolerance
-        if (Math.abs(userVal - currentAnswer) <= 0.05) {
-            feedbackText.textContent = 'Richtig! 🎉';
+        if (isCorrect) {
+            feedbackText.textContent = 'Hervorragend! Richtig.';
             feedbackText.className = 'feedback correct';
-            score += 10;
-            scoreValue.textContent = score;
+            streak++;
+            score += 10 + streak * 2;
+            updateStreakDisplay();
         } else {
-            feedbackText.textContent = `Knapp daneben. Richtig wäre ca. ${currentAnswer.toFixed(2)}.`;
+            feedbackText.textContent = `Nicht ganz. Richtig ist ${currentAnswer.toFixed(2)}.`;
             feedbackText.className = 'feedback incorrect';
+            streak = 0;
+            updateStreakDisplay();
         }
+
+        scoreValue.textContent = score;
+        progressFill.style.width = `${(currentQuestionIndex / totalQuestions) * 100}%`;
+        currentQuestionIndex++;
 
         answerInput.disabled = true;
         submitAnswerBtn.disabled = true;
@@ -267,12 +339,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (submitAnswerBtn) {
-        submitAnswerBtn.addEventListener('click', checkAnswer);
-        nextQuestionBtn.addEventListener('click', generateQuestion);
-        answerInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkAnswer();
-        });
-        // Start first question
+        submitAnswerBtn.onclick = checkAnswer;
+        nextQuestionBtn.onclick = generateQuestion;
+        answerInput.onkeypress = (e) => { if (e.key === 'Enter') checkAnswer(); };
         generateQuestion();
     }
 

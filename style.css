@@ -627,16 +627,56 @@ input[type=range]::-webkit-slider-runnable-track {
 .exercise-header {
     display: flex;
     justify-content: flex-end;
+    gap: 1rem;
     margin-bottom: 1.5rem;
 }
 
-.score-display {
+.score-display,
+.streak-display {
     background: rgba(139, 92, 246, 0.2);
     padding: 0.5rem 1.5rem;
     border-radius: 2rem;
     border: 1px solid var(--primary);
     box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
     font-weight: 600;
+}
+
+.streak-display {
+    border-color: var(--secondary);
+    background: rgba(219, 39, 119, 0.1);
+    animation: bounce 0.5s ease;
+}
+
+.exercise-visual-container {
+    width: 100%;
+    height: 180px;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.exercise-svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.3));
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .question {

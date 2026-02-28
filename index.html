@@ -255,12 +255,15 @@
                 <h2>Trainiere dein Wissen</h2>
                 <div class="exercise-container">
                     <div class="exercise-header">
+                        <span id="streakDisplay" class="streak-display" style="display: none;">🔥 <strong
+                                id="streakValue">0</strong></span>
                         <span class="score-display">Punkte: <strong id="scoreValue">0</strong></span>
                     </div>
                     <div class="exercise-body">
                         <div class="progress-container">
                             <div id="progressFill" class="progress-fill"></div>
                         </div>
+                        <div id="exerciseVisual" class="exercise-visual-container"></div>
                         <p id="questionText" class="question">Berechne ...</p>
                         <div class="input-group">
                             <input type="number" id="answerInput" step="0.01" placeholder="Deine Antwort (z.B. 0.71)">
